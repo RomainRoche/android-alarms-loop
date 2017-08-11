@@ -3,6 +3,7 @@ package com.romainroche.alarms;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -26,7 +27,7 @@ public class ColorChangingView extends View {
     @Override
     public void draw(Canvas canvas) {
         long timestamp = System.currentTimeMillis();
-        if (timestamp > this.targetTime) {
+        if (timestamp > this.targetTime && this.targetTime != 0) {
             this.targetTime = 0;
             int tmpColor = this.fromColor;
             this.fromColor = toColor;
@@ -36,9 +37,11 @@ public class ColorChangingView extends View {
             this.targetTime = timestamp + this.fadeTime;
         }
         long deltaT = this.targetTime - timestamp;
-        float ratio = (float)(deltaT / this.fadeTime);
-        int color0 = (int)Long.parseLong(getResources().getString(this.fromColor));
-        int color1 = (int)Long.parseLong(getResources().getString(this.toColor));
+        float ratio = ((float)deltaT / (float)this.fadeTime);
+        int color0 = getResources().getInteger(this.fromColor);
+        int color1 = getResources().getInteger(this.toColor);
+        //int color0 = (int)Long.parseLong(getResources().getString(this.fromColor));
+        //int color1 = (int)Long.parseLong(getResources().getString(this.toColor));
         int bgColor = color0 + (int)((color1 - color0) * ratio);
         this.setBackgroundColor(bgColor);
         this.invalidate();
