@@ -13,7 +13,7 @@ public class ColorChangingView extends View {
 
     private int fromColor, fromRed, fromGreen, fromBlue;
     private int toColor, toRed, toGreen, toBlue;
-    public long fadeTime = (long)(3.0 * 60 * 1000.0); // in milliseconds
+    public long duration = (long)(3.0 * 60 * 1000.0); // in milliseconds
     public long targetTime = (long)0;
 
     public ColorChangingView(Context context, AttributeSet attrs) {
@@ -51,10 +51,10 @@ public class ColorChangingView extends View {
             this.setToColorResource(tmpColor);
         }
         if (this.targetTime == 0) {
-            this.targetTime = timestamp + this.fadeTime;
+            this.targetTime = timestamp + this.duration;
         }
         long deltaT = this.targetTime - timestamp;
-        float ratio = 1 - ((float)deltaT / (float)this.fadeTime);
+        float ratio = 1 - ((float)deltaT / (float)this.duration);
 
         int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
         int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
