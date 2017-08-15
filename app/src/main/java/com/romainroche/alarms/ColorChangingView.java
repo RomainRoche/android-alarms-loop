@@ -50,6 +50,18 @@ public class ColorChangingView extends LinearLayout {
         this.toBlue = (to) & 0xff;
     }
 
+    private String countdownText(long deltaT) {
+        long remainingTime = deltaT;
+        long minutes = remainingTime / (long)(60 * 1000);
+        long milliseconds = remainingTime % (long)(60 * 1000);
+        long seconds = milliseconds / 1000;
+        milliseconds = milliseconds - (seconds * 1000);
+        String minutesString = minutes >= 10 ? "" : "0";
+        String secondsString = seconds >= 10 ? "" : "0";
+        String milliString = milliseconds >= 100 ? "" : milliseconds >= 10 ? "0" : "000";
+        return minutesString + minutes + ":" + secondsString + seconds + "." + milliString + milliseconds;
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for(int i = 0 ; i < this.getChildCount() ; i++){
@@ -78,6 +90,7 @@ public class ColorChangingView extends LinearLayout {
         int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
 
         this.setBackgroundColor(res);
+        this.textView.setText(this.countdownText(deltaT));
         this.invalidate();
         super.draw(canvas);
     }
