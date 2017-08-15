@@ -3,24 +3,33 @@ package com.romainroche.alarms;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Created by rroche on 11/08/2017.
  */
 
-public class ColorChangingView extends View {
+public class ColorChangingView extends LinearLayout {
 
     private int fromColor, fromRed, fromGreen, fromBlue;
     private int toColor, toRed, toGreen, toBlue;
     public long duration = (long)(3.0 * 60 * 1000.0); // in milliseconds
     public long targetTime = (long)0;
 
+    private TextView textView;
+
     public ColorChangingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setFromColorResource(R.color.background0);
         this.setToColorResource(R.color.background1);
         this.setBackgroundResource(this.fromColor);
+        View.inflate(context, R.layout.countdown, this);
+        this.textView = (TextView)findViewById(R.id.countdownTextView);
     }
 
     public int getFromColorResource() { return this.fromColor; }
@@ -39,6 +48,13 @@ public class ColorChangingView extends View {
         this.toRed = (to >> 16) & 0xff;
         this.toGreen = (to >> 8) & 0xff;
         this.toBlue = (to) & 0xff;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for(int i = 0 ; i < this.getChildCount() ; i++){
+            this.getChildAt(i).layout(l, t, r, b);
+        }
     }
 
     @Override
