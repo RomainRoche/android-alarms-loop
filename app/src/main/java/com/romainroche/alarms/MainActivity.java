@@ -12,9 +12,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ConstraintLayout root = (ConstraintLayout)findViewById(R.id.root);
-        root.setBackgroundResource(R.color.background0);
     }
 
 }
