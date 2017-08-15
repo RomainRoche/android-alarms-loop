@@ -13,7 +13,7 @@ public class ColorChangingView extends View {
 
     private int fromColor, fromRed, fromGreen, fromBlue;
     private int toColor, toRed, toGreen, toBlue;
-    public long fadeTime = (long)(1.0 * 10 * 1000.0); // in milliseconds
+    public long fadeTime = (long)(3.0 * 60 * 1000.0); // in milliseconds
     public long targetTime = (long)0;
 
     public ColorChangingView(Context context, AttributeSet attrs) {
