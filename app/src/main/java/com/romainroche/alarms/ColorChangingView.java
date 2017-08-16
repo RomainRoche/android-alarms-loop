@@ -14,12 +14,12 @@ public class ColorChangingView extends LinearLayout {
     private int fromColor, fromRed, fromGreen, fromBlue;
     private int toColor, toRed, toGreen, toBlue;
 
-    protected long timestamp, deltaT;
+    protected long timestamp, remainingTime;
 
     public long duration = (long)(1.0 * 60 * 1000.0); // in milliseconds
     public long targetTime = (long)0;
 
-    public boolean isOn = true;
+    public boolean isOn = false;
 
 
     public ColorChangingView(Context context, AttributeSet attrs) {
@@ -27,7 +27,7 @@ public class ColorChangingView extends LinearLayout {
         this.setFromColorResource(R.color.background0);
         this.setToColorResource(R.color.background1);
         this.setBackgroundResource(this.fromColor);
-        this.getTimeData();
+        this.remainingTime = duration;
     }
 
     public int getFromColorResource() { return this.fromColor; }
@@ -48,6 +48,25 @@ public class ColorChangingView extends LinearLayout {
         this.toBlue = (to) & 0xff;
     }
 
+    public void play() {
+        this.timestamp = System.currentTimeMillis();
+        this.targetTime = this.timestamp + this.remainingTime;
+        this.isOn = true;
+        this.invalidate();
+    }
+
+    public void pause() {
+        this.isOn = false;
+        this.invalidate();
+    }
+
+    public void reset() {
+        this.isOn = false;
+        this.setBackgroundResource(this.fromColor);
+        this.remainingTime = this.duration;
+        this.invalidate();
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for(int i = 0 ; i < this.getChildCount() ; i++){
@@ -55,26 +74,27 @@ public class ColorChangingView extends LinearLayout {
         }
     }
 
-    protected void getTimeData() {
+    protected void resetTimeData() {
         this.timestamp = System.currentTimeMillis();
-        if (this.timestamp > this.targetTime && this.targetTime != 0) {
-            this.targetTime = 0;
+        if (this.timestamp >= this.targetTime) {
+            this.targetTime = this.targetTime + this.duration;
             int tmpColor = this.fromColor;
             this.setFromColorResource(this.toColor);
             this.setToColorResource(tmpColor);
         }
-        if (this.targetTime == 0) {
-            this.targetTime = timestamp + this.duration;
-        }
-        this.deltaT = this.targetTime - this.timestamp;
+        this.setRemainingTime();
+    }
+
+    protected void setRemainingTime() {
+        this.remainingTime = this.targetTime - this.timestamp;
     }
 
     @Override
     public void draw(Canvas canvas) {
 
         if (this.isOn) {
-            this.getTimeData();
-            float ratio = 1 - ((float)this.deltaT / (float)this.duration);
+            this.resetTimeData();
+            float ratio = 1 - ((float)this.remainingTime / (float)this.duration);
 
             int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
             int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
