@@ -19,6 +19,7 @@ public class ColorChangingView extends LinearLayout {
     public long duration = (long)(1.0 * 60 * 1000.0); // in milliseconds
     public long targetTime = (long)0;
 
+    public boolean isOn = true;
 
 
     public ColorChangingView(Context context, AttributeSet attrs) {
@@ -26,6 +27,7 @@ public class ColorChangingView extends LinearLayout {
         this.setFromColorResource(R.color.background0);
         this.setToColorResource(R.color.background1);
         this.setBackgroundResource(this.fromColor);
+        this.getTimeData();
     }
 
     public int getFromColorResource() { return this.fromColor; }
@@ -69,16 +71,20 @@ public class ColorChangingView extends LinearLayout {
 
     @Override
     public void draw(Canvas canvas) {
-        this.getTimeData();
-        float ratio = 1 - ((float)this.deltaT / (float)this.duration);
 
-        int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
-        int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
-        int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
-        int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
+        if (this.isOn) {
+            this.getTimeData();
+            float ratio = 1 - ((float)this.deltaT / (float)this.duration);
 
-        this.setBackgroundColor(res);
-        this.invalidate();
+            int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
+            int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
+            int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
+            int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
+
+            this.setBackgroundColor(res);
+            this.invalidate();
+        }
+
         super.draw(canvas);
     }
 

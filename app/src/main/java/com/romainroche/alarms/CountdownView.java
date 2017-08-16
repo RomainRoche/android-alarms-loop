@@ -18,10 +18,11 @@ public class CountdownView extends ColorChangingView {
         super(context, attrs);
         View.inflate(context, R.layout.countdown, this);
         this.textView = (TextView)findViewById(R.id.countdownTextView);
+        this.textView.setText(this.countdownText());
     }
 
-    private String countdownText(long deltaT) {
-        long remainingTime = deltaT;
+    private String countdownText() {
+        long remainingTime = this.deltaT;
         long minutes = remainingTime / (long)(60 * 1000);
         long milliseconds = remainingTime % (long)(60 * 1000);
         long seconds = milliseconds / 1000;
@@ -34,9 +35,11 @@ public class CountdownView extends ColorChangingView {
 
     @Override
     public void draw(Canvas canvas) {
-        this.getTimeData();
-        this.textView.setText(this.countdownText(this.deltaT));
-        this.invalidate();
+        if (this.isOn) {
+            this.getTimeData();
+            this.textView.setText(this.countdownText());
+            this.invalidate();
+        }
         super.draw(canvas);
     }
 
