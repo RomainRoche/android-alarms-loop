@@ -60,22 +60,23 @@ public class ColorChangingView extends LinearLayout {
     }
 
     public void setColors(int[] colors) {
+        if (colors == null || colors.length == 0) {
+            colors = new int[] {R.color.background0, R.color.background1};
+        } else if (colors.length == 1) {
+            colors = new int[] {colors[0], R.color.background1};
+        }
         this.colors = colors;
-        if (this.colors.length > 0) {
-            this.setBackgroundResource(this.colors[0]);
-            this.setFromColorResource(this.colors[0]);
-            this.setToColorResource(this.colors[0]);
-        }
-        if (this.colors.length > 1) {
-            this.setToColorResource(this.colors[1]);
-        }
+        this.setBackgroundResource(this.colors[0]);
+        this.setFromColorResource(this.colors[0]);
+        this.setToColorResource(this.colors[1]);
     }
 
     public void setDurations(long[] durations) {
-        this.durations = durations;
-        if (this.durations.length > 0) {
-            this.remainingTime = this.durations[0];
+        if (durations == null || durations.length == 0) {
+            durations = new long[] {1 * 60 * 1000};
         }
+        this.durations = durations;
+        this.remainingTime = this.durations[0];
     }
 
     public void play() {
