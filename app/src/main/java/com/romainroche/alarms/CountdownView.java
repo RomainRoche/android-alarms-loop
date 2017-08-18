@@ -44,6 +44,12 @@ public class CountdownView extends ColorChangingView {
     }
 
     @Override
+    public void setDurations(long[] durations) {
+        super.setDurations(durations);
+        this.textView.setText(this.countdownText());
+    }
+
+    @Override
     public void play() {
         super.play();
         this.playButton.setText(this.getResources().getString(R.string.pause));

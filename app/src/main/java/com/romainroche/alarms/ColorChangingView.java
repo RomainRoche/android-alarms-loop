@@ -11,41 +11,71 @@ import android.widget.LinearLayout;
 
 public class ColorChangingView extends LinearLayout {
 
-    private int fromColor, fromRed, fromGreen, fromBlue;
-    private int toColor, toRed, toGreen, toBlue;
+    private int index = 0;
+    private int[] colors = new int[] {R.color.background0, R.color.background1};
+    private long[] durations = new long[] {(long)(1.0 * 60 * 1000.0)};
+
+    private int fromRed, fromGreen, fromBlue;
+    private int toRed, toGreen, toBlue;
 
     protected long timestamp, remainingTime;
-
-    public long duration = (long)(1.0 * 60 * 1000.0); // in milliseconds
-    public long targetTime = (long)0;
+    protected long targetTime = (long)0;
 
     public boolean isOn = false;
 
 
     public ColorChangingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setFromColorResource(R.color.background0);
-        this.setToColorResource(R.color.background1);
-        this.setBackgroundResource(this.fromColor);
-        this.remainingTime = duration;
+        this.colors = new int[] {R.color.background0, R.color.background1};
+        this.setFromColorResource(this.colors[0]);
+        this.setToColorResource(this.colors[1]);
+        this.setBackgroundResource(this.colors[0]);
+        this.remainingTime = this.durations[0];
     }
 
-    public int getFromColorResource() { return this.fromColor; }
-    public void setFromColorResource(int resourceId) {
-        this.fromColor = resourceId;
-        int from = this.getResources().getInteger(this.fromColor);
+    private void setFromColorResource(int resourceId) {
+        int from = this.getResources().getInteger(resourceId);
         this.fromRed = (from >> 16) & 0xff;
         this.fromGreen = (from >> 8) & 0xff;
         this.fromBlue = (from) & 0xff;
     }
 
-    public int getToColorResource() { return this.toColor; }
-    public void setToColorResource(int resourceId) {
-        this.toColor = resourceId;
-        int to = this.getResources().getInteger(this.toColor);
+    private void setToColorResource(int resourceId) {
+        int to = this.getResources().getInteger(resourceId);
         this.toRed = (to >> 16) & 0xff;
         this.toGreen = (to >> 8) & 0xff;
         this.toBlue = (to) & 0xff;
+    }
+
+    private int getCurrentColorResource() {
+        return this.colors[this.index % this.colors.length];
+    }
+
+    private int getNextColorResource() {
+        return this.colors[(this.index + 1) % this.colors.length];
+    }
+
+    private long getCurrentDuration() {
+        return this.durations[this.index % this.durations.length];
+    }
+
+    public void setColors(int[] colors) {
+        this.colors = colors;
+        if (this.colors.length > 0) {
+            this.setBackgroundResource(this.colors[0]);
+            this.setFromColorResource(this.colors[0]);
+            this.setToColorResource(this.colors[0]);
+        }
+        if (this.colors.length > 1) {
+            this.setToColorResource(this.colors[1]);
+        }
+    }
+
+    public void setDurations(long[] durations) {
+        this.durations = durations;
+        if (this.durations.length > 0) {
+            this.remainingTime = this.durations[0];
+        }
     }
 
     public void play() {
@@ -62,8 +92,8 @@ public class ColorChangingView extends LinearLayout {
 
     public void reset() {
         this.isOn = false;
-        this.setBackgroundResource(this.fromColor);
-        this.remainingTime = this.duration;
+        this.setBackgroundResource(this.colors[0]);
+        this.remainingTime = this.durations[0];
         this.invalidate();
     }
 
@@ -77,10 +107,10 @@ public class ColorChangingView extends LinearLayout {
     protected void resetTimeData() {
         this.timestamp = System.currentTimeMillis();
         if (this.timestamp >= this.targetTime) {
-            this.targetTime = this.targetTime + this.duration;
-            int tmpColor = this.fromColor;
-            this.setFromColorResource(this.toColor);
-            this.setToColorResource(tmpColor);
+            this.index++;
+            this.targetTime = this.targetTime + this.getCurrentDuration();
+            this.setFromColorResource(this.getCurrentColorResource());
+            this.setToColorResource(this.getNextColorResource());
         }
         this.setRemainingTime();
     }
@@ -94,7 +124,7 @@ public class ColorChangingView extends LinearLayout {
 
         if (this.isOn) {
             this.resetTimeData();
-            float ratio = 1 - ((float)this.remainingTime / (float)this.duration);
+            float ratio = 1 - ((float)this.remainingTime / (float)this.getCurrentDuration());
 
             int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
             int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
