@@ -152,8 +152,8 @@ public class ColorChangingView extends ConstraintLayout {
         Animation scale = new ScaleAnimation(
                 0.f, 1.f,
                 0.f, 1.f,
-                Animation.RELATIVE_TO_SELF, 1.f,
-                Animation.RELATIVE_TO_SELF, 1.f
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
 
         );
         scale.setFillAfter(true);
