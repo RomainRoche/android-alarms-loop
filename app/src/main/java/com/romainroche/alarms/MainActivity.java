@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.countdownView = (CountdownView)this.findViewById(R.id.countdownView);
         this.countdownView.setColors(new int[] {R.color.background1, R.color.background0, R.color.background3});
-        this.countdownView.setDurations(new long[] {1 * 30 * 1000, 1 * 40 * 1000, 1 * 20 * 1000});
+        this.countdownView.setDurations(new long[] {1 * 2 * 1000, 1 * 4 * 1000, 1 * 3 * 1000});
     }
 
 }

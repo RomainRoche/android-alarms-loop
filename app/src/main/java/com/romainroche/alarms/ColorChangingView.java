@@ -2,14 +2,20 @@ package com.romainroche.alarms;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Created by rroche on 11/08/2017.
  */
 
-public class ColorChangingView extends LinearLayout {
+public class ColorChangingView extends ConstraintLayout {
 
     private int index = 0;
     private int[] colors = new int[] {R.color.background0, R.color.background1};
@@ -23,14 +29,21 @@ public class ColorChangingView extends LinearLayout {
 
     public boolean isOn = false;
 
+    // private View wave;
 
     public ColorChangingView(Context context, AttributeSet attrs) {
+
         super(context, attrs);
+
         this.colors = new int[] {R.color.background0, R.color.background1};
         this.setFromColorResource(this.colors[0]);
         this.setToColorResource(this.colors[1]);
         this.setBackgroundResource(this.colors[0]);
         this.remainingTime = this.durations[0];
+
+        //this.wave = new View(this.getContext());
+        //this.wave.setAlpha(0.f);
+        //this.addView(this.wave, 0);
     }
 
     private void setFromColorResource(int resourceId) {
@@ -100,9 +113,72 @@ public class ColorChangingView extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
+        // int width = this.getWidth() * 1;
+        // int height = this.getHeight() * 1;
+        // float x = 0.f; // width / -4.f;
+        // float y = 0.f; // height / -4.f;
+
+        // RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
+        // layout.leftMargin = (int)x;
+        // layout.topMargin = (int)y;
+
+        // wave.setLayoutParams(layout);
+
         for(int i = 0 ; i < this.getChildCount() ; i++){
             this.getChildAt(i).layout(l, t, r, b);
         }
+    }
+
+    protected void wave() {
+
+        int width = this.getWidth() * 1;
+        int height = this.getHeight() * 1;
+        float x = 0.f; // width / -4.f;
+        float y = 0.f; // height / -4.f;
+
+        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
+        layout.leftMargin = (int)x;
+        layout.topMargin = (int)y;
+
+        final View wave = new View(this.getContext());
+        wave.setLayoutParams(layout);
+        wave.setBackgroundResource(this.getCurrentColorResource());
+
+        wave.setX(x);
+        wave.setY(y);
+        wave.setZ(0.f);
+
+        Animation scale = new ScaleAnimation(
+                0.f, 1.f,
+                0.f, 1.f,
+                Animation.RELATIVE_TO_SELF, 1.f,
+                Animation.RELATIVE_TO_SELF, 1.f
+
+        );
+        scale.setFillAfter(true);
+        scale.setDuration(1000);
+        final ColorChangingView self = this;
+        scale.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // nothing
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                self.setBackgroundResource(self.getCurrentColorResource());
+                self.removeView(wave);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // nothing
+            }
+        });
+        this.addView(wave, 0);
+        this.invalidate();
+        wave.startAnimation(scale);
     }
 
     protected void resetTimeData() {
@@ -110,8 +186,9 @@ public class ColorChangingView extends LinearLayout {
         if (this.timestamp >= this.targetTime) {
             this.index++;
             this.targetTime = this.targetTime + this.getCurrentDuration();
-            this.setFromColorResource(this.getCurrentColorResource());
-            this.setToColorResource(this.getNextColorResource());
+            this.wave();
+            //this.setFromColorResource(this.getCurrentColorResource());
+            //this.setToColorResource(this.getNextColorResource());
         }
         this.setRemainingTime();
     }
@@ -132,8 +209,8 @@ public class ColorChangingView extends LinearLayout {
             int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
             int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
 
-            this.setBackgroundColor(res);
-            this.invalidate();
+            //this.setBackgroundColor(res);
+            //this.invalidate();
         }
 
         super.draw(canvas);
