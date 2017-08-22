@@ -115,7 +115,7 @@ public class ColorChangingView extends ConstraintLayout {
         }
     }
 
-    protected void wave2() {
+    protected void wave() {
 
         int width = this.getWidth() * 2;
         int height = this.getHeight() * 2;
@@ -137,9 +137,7 @@ public class ColorChangingView extends ConstraintLayout {
                 R.animator.scale_up);
         set.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
+            public void onAnimationStart(Animator animation) {}
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -148,14 +146,10 @@ public class ColorChangingView extends ConstraintLayout {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
+            public void onAnimationCancel(Animator animation) {}
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {}
         });
 
         this.addView(wave, 0);
@@ -167,64 +161,12 @@ public class ColorChangingView extends ConstraintLayout {
 
     }
 
-    protected void wave() {
-
-        int width = this.getWidth() * 1;
-        int height = this.getHeight() * 1;
-        float x = 0.f; // width / -4.f;
-        float y = 0.f; // height / -4.f;
-
-        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
-        layout.leftMargin = (int)x;
-        layout.topMargin = (int)y;
-
-        final View wave = new View(this.getContext());
-        wave.setLayoutParams(layout);
-        wave.setBackgroundResource(this.getCurrentColorResource());
-
-        wave.setX(x);
-        wave.setY(y);
-
-        Animation scale = new ScaleAnimation(
-                0.f, 1.f,
-                0.f, 1.f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-
-        );
-        scale.setFillAfter(true);
-        scale.setDuration(1000);
-        final ColorChangingView self = this;
-        scale.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // nothing
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                self.setBackgroundResource(self.getCurrentColorResource());
-                self.removeView(wave);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // nothing
-            }
-        });
-        this.addView(wave, 0);
-        this.invalidate();
-        wave.startAnimation(scale);
-    }
-
     protected void resetTimeData() {
         this.timestamp = System.currentTimeMillis();
         if (this.timestamp >= this.targetTime) {
             this.index++;
             this.targetTime = this.targetTime + this.getCurrentDuration();
-            this.wave2();
-            //this.setFromColorResource(this.getCurrentColorResource());
-            //this.setToColorResource(this.getNextColorResource());
+            this.wave();
         }
         this.setRemainingTime();
     }
@@ -238,7 +180,7 @@ public class ColorChangingView extends ConstraintLayout {
 
         if (this.isOn) {
             this.resetTimeData();
-            float ratio = 1 - ((float)this.remainingTime / (float)this.getCurrentDuration());
+            float ratio = .5f * (1 - ((float)this.remainingTime / (float)this.getCurrentDuration()));
 
             int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
             int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
