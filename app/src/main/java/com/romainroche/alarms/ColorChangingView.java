@@ -1,5 +1,8 @@
 package com.romainroche.alarms;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.constraint.ConstraintLayout;
@@ -29,8 +32,6 @@ public class ColorChangingView extends ConstraintLayout {
 
     public boolean isOn = false;
 
-    // private View wave;
-
     public ColorChangingView(Context context, AttributeSet attrs) {
 
         super(context, attrs);
@@ -40,10 +41,6 @@ public class ColorChangingView extends ConstraintLayout {
         this.setToColorResource(this.colors[1]);
         this.setBackgroundResource(this.colors[0]);
         this.remainingTime = this.durations[0];
-
-        //this.wave = new View(this.getContext());
-        //this.wave.setAlpha(0.f);
-        //this.addView(this.wave, 0);
     }
 
     private void setFromColorResource(int resourceId) {
@@ -113,21 +110,61 @@ public class ColorChangingView extends ConstraintLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
-        // int width = this.getWidth() * 1;
-        // int height = this.getHeight() * 1;
-        // float x = 0.f; // width / -4.f;
-        // float y = 0.f; // height / -4.f;
-
-        // RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
-        // layout.leftMargin = (int)x;
-        // layout.topMargin = (int)y;
-
-        // wave.setLayoutParams(layout);
-
         for(int i = 0 ; i < this.getChildCount() ; i++){
             this.getChildAt(i).layout(l, t, r, b);
         }
+    }
+
+    protected void wave2() {
+
+        int width = this.getWidth() * 2;
+        int height = this.getHeight() * 2;
+        float x = 0.f; // width / -4.f;
+        float y = 0.f; // height / -4.f;
+
+        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
+        layout.leftMargin = (int)x;
+        layout.topMargin = (int)y;
+        final View wave = new View(this.getContext());
+        wave.setBackgroundResource(this.getCurrentColorResource());
+        wave.setLayoutParams(layout);
+        wave.setX(x);
+        wave.setY(y);
+
+        final ColorChangingView self = this;
+
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this.getContext(),
+                R.animator.scale_up);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                self.setBackgroundResource(self.getCurrentColorResource());
+                self.removeView(wave);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        this.addView(wave, 0);
+        this.invalidate();
+
+        set.setTarget(wave);
+        set.start();
+
+
     }
 
     protected void wave() {
@@ -147,7 +184,6 @@ public class ColorChangingView extends ConstraintLayout {
 
         wave.setX(x);
         wave.setY(y);
-        wave.setZ(0.f);
 
         Animation scale = new ScaleAnimation(
                 0.f, 1.f,
@@ -186,7 +222,7 @@ public class ColorChangingView extends ConstraintLayout {
         if (this.timestamp >= this.targetTime) {
             this.index++;
             this.targetTime = this.targetTime + this.getCurrentDuration();
-            this.wave();
+            this.wave2();
             //this.setFromColorResource(this.getCurrentColorResource());
             //this.setToColorResource(this.getNextColorResource());
         }
