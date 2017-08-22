@@ -13,4 +13,8 @@
         <item name="android:textColor">@color/background0</item>
     </style>
 
+    <style name="AppTheme.Button.Clear" parent="AppTheme.Button">
+        <item name="android:textColor">@color/background2</item>
+    </style>
+
 </resources>
