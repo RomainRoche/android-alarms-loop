@@ -93,7 +93,7 @@ public class ColorChangingView extends FrameLayout {
         }
     }
 
-    protected void doCircle() {
+    private void doCircle() {
 
         if (this.circle == null) {
             this.circle = this.findViewById(R.id.circle);
