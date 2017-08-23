@@ -117,9 +117,9 @@ public class ColorChangingView extends FrameLayout {
 
         final ColorChangingView self = this;
 
-        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this.getContext(),
+        AnimatorSet scale = (AnimatorSet) AnimatorInflater.loadAnimator(this.getContext(),
                 R.animator.scale_up);
-        set.addListener(new Animator.AnimatorListener() {
+        scale.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {}
 
@@ -136,9 +136,9 @@ public class ColorChangingView extends FrameLayout {
             public void onAnimationRepeat(Animator animation) {}
         });
 
-        set.setTarget(self.circle);
-        self.circle.setAlpha(1.f);
-        set.start();
+        scale.setTarget(self.circle);
+        this.circle.setAlpha(1.f);
+        scale.start();
 
     }
 
