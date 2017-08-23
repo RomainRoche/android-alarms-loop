@@ -28,9 +28,6 @@ public class ColorChangingView extends FrameLayout {
     private int[] colors = new int[] {R.color.background0, R.color.background1};
     private long[] durations = new long[] {(long)(1.0 * 60 * 1000.0)};
 
-    private int fromRed, fromGreen, fromBlue;
-    private int toRed, toGreen, toBlue;
-
     protected long timestamp, remainingTime;
     protected long targetTime = (long)0;
 
@@ -43,25 +40,9 @@ public class ColorChangingView extends FrameLayout {
         super(context, attrs);
 
         this.colors = new int[] {R.color.background0, R.color.background1};
-        this.setFromColorResource(this.colors[0]);
-        this.setToColorResource(this.colors[1]);
         this.setBackgroundResource(this.colors[0]);
         this.remainingTime = this.durations[0];
 
-    }
-
-    private void setFromColorResource(int resourceId) {
-        int from = this.getResources().getInteger(resourceId);
-        this.fromRed = (from >> 16) & 0xff;
-        this.fromGreen = (from >> 8) & 0xff;
-        this.fromBlue = (from) & 0xff;
-    }
-
-    private void setToColorResource(int resourceId) {
-        int to = this.getResources().getInteger(resourceId);
-        this.toRed = (to >> 16) & 0xff;
-        this.toGreen = (to >> 8) & 0xff;
-        this.toBlue = (to) & 0xff;
     }
 
     private int getCurrentColorResource() {
@@ -84,8 +65,6 @@ public class ColorChangingView extends FrameLayout {
         }
         this.colors = colors;
         this.setBackgroundResource(this.colors[0]);
-        this.setFromColorResource(this.colors[0]);
-        this.setToColorResource(this.colors[1]);
     }
 
     public void setDurations(long[] durations) {
@@ -187,20 +166,9 @@ public class ColorChangingView extends FrameLayout {
 
     @Override
     public void draw(Canvas canvas) {
-
         if (this.isOn) {
             this.resetTimeData();
-            //float ratio = .5f * (1 - ((float)this.remainingTime / (float)this.getCurrentDuration()));
-
-            //int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
-            //int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
-            //int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
-            //int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
-
-            //this.setBackgroundColor(res);
-            //this.invalidate();
         }
-
         super.draw(canvas);
     }
 
