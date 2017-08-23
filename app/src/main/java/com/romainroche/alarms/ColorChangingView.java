@@ -5,6 +5,9 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -125,12 +128,25 @@ public class ColorChangingView extends FrameLayout {
             this.circle = this.findViewById(R.id.circle);
         }
 
-        int width = this.getHeight() * 2;
+        int width = this.getWidth() * 2;
         int height = this.getHeight() * 2;
+        if (height > width) {
+            width = height;
+        } else {
+            height = width;
+        }
+
         FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, height);
         layout.leftMargin = (this.getWidth() - width) / 2;
         layout.topMargin = (this.getHeight() - height) / 2;
         this.circle.setLayoutParams(layout);
+
+        Drawable bg = this.circle.getBackground();
+        if (bg instanceof ShapeDrawable) {
+            ((ShapeDrawable)bg).getPaint().setColor(this.getResources().getInteger(this.getCurrentColorResource()));
+        } else if (bg instanceof GradientDrawable) {
+            ((GradientDrawable)bg).setColor(this.getResources().getInteger(this.getCurrentColorResource()));
+        }
 
         final ColorChangingView self = this;
 
