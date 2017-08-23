@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context="com.romainroche.alarms.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <com.romainroche.alarms.CountdownView
         android:id="@+id/countdownView"
         android:layout_width="0dp"

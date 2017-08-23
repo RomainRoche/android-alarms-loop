@@ -7,6 +7,7 @@ package com.romainroche.alarms.data;
 public class Alarm {
 
     public double duration;
+    public String name;
     public String color;
 
 }
