@@ -141,12 +141,8 @@ public class ColorChangingView extends FrameLayout {
         layout.topMargin = (this.getHeight() - height) / 2;
         this.circle.setLayoutParams(layout);
 
-        Drawable bg = this.circle.getBackground();
-        if (bg instanceof ShapeDrawable) {
-            ((ShapeDrawable)bg).getPaint().setColor(this.getResources().getInteger(this.getCurrentColorResource()));
-        } else if (bg instanceof GradientDrawable) {
-            ((GradientDrawable)bg).setColor(this.getResources().getInteger(this.getCurrentColorResource()));
-        }
+        GradientDrawable bg = (GradientDrawable)this.circle.getBackground();
+        bg.setColor(this.getResources().getInteger(this.getCurrentColorResource()));
 
         final ColorChangingView self = this;
 
