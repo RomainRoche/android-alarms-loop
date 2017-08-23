@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -18,7 +19,7 @@ import android.widget.RelativeLayout;
  * Created by rroche on 11/08/2017.
  */
 
-public class ColorChangingView extends ConstraintLayout {
+public class ColorChangingView extends FrameLayout {
 
     private int index = 0;
     private int[] colors = new int[] {R.color.background0, R.color.background1};
@@ -32,6 +33,8 @@ public class ColorChangingView extends ConstraintLayout {
 
     public boolean isOn = false;
 
+    private View circle;
+
     public ColorChangingView(Context context, AttributeSet attrs) {
 
         super(context, attrs);
@@ -41,6 +44,7 @@ public class ColorChangingView extends ConstraintLayout {
         this.setToColorResource(this.colors[1]);
         this.setBackgroundResource(this.colors[0]);
         this.remainingTime = this.durations[0];
+
     }
 
     private void setFromColorResource(int resourceId) {
@@ -115,6 +119,46 @@ public class ColorChangingView extends ConstraintLayout {
         }
     }
 
+    protected void doCircle() {
+
+        if (this.circle == null) {
+            this.circle = this.findViewById(R.id.circle);
+        }
+
+        int width = this.getHeight() * 2;
+        int height = this.getHeight() * 2;
+        FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, height);
+        layout.leftMargin = (this.getWidth() - width) / 2;
+        layout.topMargin = (this.getHeight() - height) / 2;
+        this.circle.setLayoutParams(layout);
+
+        final ColorChangingView self = this;
+
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this.getContext(),
+                R.animator.scale_up);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                self.setBackgroundResource(self.getCurrentColorResource());
+                self.circle.setAlpha(0.f);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        });
+
+        set.setTarget(self.circle);
+        self.circle.setAlpha(1.f);
+        set.start();
+
+    }
+
     protected void wave() {
 
         int width = this.getWidth() * 2;
@@ -166,7 +210,7 @@ public class ColorChangingView extends ConstraintLayout {
         if (this.timestamp >= this.targetTime) {
             this.index++;
             this.targetTime = this.targetTime + this.getCurrentDuration();
-            this.wave();
+            this.doCircle();
         }
         this.setRemainingTime();
     }
