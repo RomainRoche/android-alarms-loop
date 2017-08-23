@@ -171,52 +171,6 @@ public class ColorChangingView extends FrameLayout {
 
     }
 
-    protected void wave() {
-
-        int width = this.getWidth() * 2;
-        int height = this.getHeight() * 2;
-        float x = 0.f; // width / -4.f;
-        float y = 0.f; // height / -4.f;
-
-        RelativeLayout.LayoutParams layout = new RelativeLayout.LayoutParams(width, height);
-        layout.leftMargin = (int)x;
-        layout.topMargin = (int)y;
-        final View wave = new View(this.getContext());
-        wave.setBackgroundResource(this.getCurrentColorResource());
-        wave.setLayoutParams(layout);
-        wave.setX(x);
-        wave.setY(y);
-
-        final ColorChangingView self = this;
-
-        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this.getContext(),
-                R.animator.scale_up);
-        set.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {}
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                self.setBackgroundResource(self.getCurrentColorResource());
-                self.removeView(wave);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {}
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {}
-        });
-
-        this.addView(wave, 0);
-        this.invalidate();
-
-        set.setTarget(wave);
-        set.start();
-
-
-    }
-
     protected void resetTimeData() {
         this.timestamp = System.currentTimeMillis();
         if (this.timestamp >= this.targetTime) {
@@ -236,12 +190,12 @@ public class ColorChangingView extends FrameLayout {
 
         if (this.isOn) {
             this.resetTimeData();
-            float ratio = .5f * (1 - ((float)this.remainingTime / (float)this.getCurrentDuration()));
+            //float ratio = .5f * (1 - ((float)this.remainingTime / (float)this.getCurrentDuration()));
 
-            int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
-            int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
-            int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
-            int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
+            //int resR = this.fromRed + (int)((this.toRed - this.fromRed) * ratio);
+            //int resG = this.fromGreen + (int)((this.toGreen - this.fromGreen) * ratio);
+            //int resB = this.fromBlue + (int)((this.toBlue - this.fromBlue) * ratio);
+            //int res = (255 & 0xff) << 24 | (resR & 0xff) << 16 | (resG & 0xff) << 8 | (resB & 0xff);
 
             //this.setBackgroundColor(res);
             //this.invalidate();
