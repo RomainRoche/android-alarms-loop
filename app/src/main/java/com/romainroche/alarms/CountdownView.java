@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.romainroche.alarms.data.Alarm;
+
+import java.util.List;
+
 /**
  * Created by rroche on 16/08/2017.
  */
@@ -16,6 +20,8 @@ public class CountdownView extends ColorChangingView {
     private TextView textView;
     private Button playButton;
     private Button clearButton;
+
+    private List<Alarm> alarms;
 
     public CountdownView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,6 +47,23 @@ public class CountdownView extends ColorChangingView {
                 countdown.reset();
             }
         });
+    }
+
+    public List<Alarm> getAlarms() { return this.alarms; }
+    public void setAlarms(List<Alarm> alarms) {
+        this.alarms = alarms;
+        long[] durations = new long[this.alarms.size()];
+        int[] colors = new int[this.alarms.size()];
+        for (int i = 0; i < this.alarms.size(); i++) {
+            durations[i] = this.alarms.get(i).getMillisecondsDuration();
+            colors[i] = this.alarms.get(i).color;
+        }
+        this.setDurations(durations);
+        this.setColors(colors);
+    }
+
+    public String getCurrentAlarmName() {
+        return this.alarms.get(this.index).name;
     }
 
     @Override

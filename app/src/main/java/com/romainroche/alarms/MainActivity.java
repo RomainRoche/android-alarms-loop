@@ -9,6 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.romainroche.alarms.data.Alarm;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private CountdownView countdownView;
@@ -21,9 +26,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+        alarms.add(new Alarm(2, "Foo", R.color.background1));
+        alarms.add(new Alarm(4, "Bar", R.color.background0));
+        alarms.add(new Alarm(3, "Baz", R.color.background3));
+
         this.countdownView = (CountdownView)this.findViewById(R.id.countdownView);
-        this.countdownView.setColors(new int[] {R.color.background1, R.color.background0, R.color.background3});
-        this.countdownView.setDurations(new long[] {1 * 2 * 1000, 1 * 4 * 1000, 1 * 3 * 1000});
+        this.countdownView.setAlarms(alarms);
     }
 
     @Override

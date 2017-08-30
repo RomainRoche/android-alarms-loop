@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 
 public class ColorChangingView extends FrameLayout {
 
-    private int index = 0;
+    protected int index = 0;
     private int[] colors = new int[] {R.color.background0, R.color.background1};
     private long[] durations = new long[] {(long)(1.0 * 60 * 1000.0)};
 

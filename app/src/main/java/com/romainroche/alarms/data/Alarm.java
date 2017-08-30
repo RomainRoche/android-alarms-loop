@@ -6,8 +6,20 @@ package com.romainroche.alarms.data;
 
 public class Alarm {
 
-    public double duration;
+    private long duration;
     public String name;
-    public String color;
+    public int color;
+
+    public Alarm(long seconds, String name, int color) {
+        this.setSecondsDuration(seconds);
+        this.name = name;
+        this.color = color;
+    }
+
+    public long getSecondsDuration() { return this.duration / 1000; }
+    public void setSecondsDuration(long seconds) {this.duration = seconds * 1000;}
+
+    public long getMillisecondsDuration() { return this.duration; }
+    public void setMillisecondsDuration(long duration) { this.duration = duration; }
 
 }
