@@ -99,8 +99,9 @@ public class ColorChangingView extends FrameLayout {
             this.circle = this.findViewById(R.id.circle);
         }
 
-        int width = this.getWidth() * 2;
-        int height = this.getHeight() * 2;
+        double radius = Math.sqrt(Math.pow(this.getWidth()/2,2) + Math.pow(this.getHeight()/2,2));
+        int width = (int)radius * 2;
+        int height = (int)radius * 2;
         if (height > width) {
             width = height;
         } else {

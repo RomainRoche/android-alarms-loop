@@ -7,4 +7,19 @@
     android:background="@color/background0"
     tools:context="com.romainroche.alarms.CreateAlarmsActivity">
 
+    <fragment android:name="com.romainroche.alarms.CeateAlarmFragment"
+        android:id="@+id/list"
+        android:layout_weight="1"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout="@layout/fragment_ceate_alarm" />
+
+    <!--fragment android:name="com.romainroche.alarms.CeateAlarmFragment"
+        android:id="@+id/list2"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" /-->
+
 </android.support.constraint.ConstraintLayout>

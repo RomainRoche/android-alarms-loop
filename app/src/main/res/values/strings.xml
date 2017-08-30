@@ -3,4 +3,9 @@
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="clear">Clear</string>
+    <string name="createLoopPlaceholder">Alarm loop name</string>
+    <string name="createNamePlaceholder">Alarm name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
