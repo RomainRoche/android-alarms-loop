@@ -99,14 +99,11 @@ public class ColorChangingView extends FrameLayout {
             this.circle = this.findViewById(R.id.circle);
         }
 
-        double radius = Math.sqrt(Math.pow(this.getWidth()/2,2) + Math.pow(this.getHeight()/2,2));
-        int width = (int)radius * 2;
-        int height = (int)radius * 2;
-        if (height > width) {
-            width = height;
-        } else {
-            height = width;
-        }
+        // the side of the square containing the circle which perfectly contains the rectangle of
+        // the activity itself is equal to the diagonal of the activity's frame
+        double radius = Math.sqrt(Math.pow(this.getWidth(),2) + Math.pow(this.getHeight(),2));
+        int width = (int)radius;
+        int height = width;
 
         FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, height);
         layout.leftMargin = (this.getWidth() - width) / 2;
