@@ -140,12 +140,16 @@ public class ColorChangingView extends FrameLayout {
 
     }
 
+    protected void targetReached() {
+        this.index++;
+        this.targetTime = this.targetTime + this.getCurrentDuration();
+        this.doCircle();
+    }
+
     protected void resetTimeData() {
         this.timestamp = System.currentTimeMillis();
         if (this.timestamp >= this.targetTime) {
-            this.index++;
-            this.targetTime = this.targetTime + this.getCurrentDuration();
-            this.doCircle();
+            this.targetReached();
         }
         this.setRemainingTime();
     }

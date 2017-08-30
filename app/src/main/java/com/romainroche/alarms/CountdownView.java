@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.romainroche.alarms.data.Alarm;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ import java.util.List;
 
 public class CountdownView extends ColorChangingView {
 
+    private TextView alarmName;
     private TextView textView;
     private Button playButton;
     private Button clearButton;
@@ -26,6 +29,7 @@ public class CountdownView extends ColorChangingView {
     public CountdownView(Context context, AttributeSet attrs) {
         super(context, attrs);
         View.inflate(context, R.layout.countdown, this);
+        this.alarmName = (TextView)findViewById(R.id.alarmName);
         this.textView = (TextView)findViewById(R.id.countdownTextView);
         this.textView.setText(this.countdownText());
 
@@ -60,10 +64,11 @@ public class CountdownView extends ColorChangingView {
         }
         this.setDurations(durations);
         this.setColors(colors);
+        this.alarmName.setText(this.getCurrentAlarmName());
     }
 
     public String getCurrentAlarmName() {
-        return this.alarms.get(this.index).name;
+        return this.alarms.get(this.index % this.alarms.size()).name;
     }
 
     @Override
@@ -99,6 +104,12 @@ public class CountdownView extends ColorChangingView {
         String secondsString = seconds >= 10 ? "" : "0";
         String milliString = milliseconds >= 100 ? "" : milliseconds >= 10 ? "0" : "00";
         return minutesString + minutes + ":" + secondsString + seconds + "." + milliString + milliseconds;
+    }
+
+    @Override
+    protected  void targetReached() {
+        super.targetReached();
+        this.alarmName.setText(this.getCurrentAlarmName());
     }
 
     @Override
